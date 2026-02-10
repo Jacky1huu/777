@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社會影響力 Social Impact | NKUST Apollo Solar Car Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- 1. 核心色票 (Dark Theme) --- */
+        :root {
+            --bg-dark: #050505;       
+            --bg-panel: #111111;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --solar-orange: #FF4400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .en-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 2. 導覽列 (與 Index 一致) --- */
+        header {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 50px; width: auto; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); }
+
+        nav ul { display: flex; gap: 1.5rem; }
+        nav a { color: #bbb; font-size: 0.95rem; font-weight: 500; letter-spacing: 1px; position: relative; }
+        nav a:hover { color: white; }
+
+        /* --- 3. Hero 主視覺 --- */
+        .edu-hero {
+            height: 70vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+
+        .edu-hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+            z-index: -1;
+        }
+
+        .edu-hero h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 5rem;
+            color: white;
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .edu-hero p {
+            font-size: 1.5rem;
+            color: var(--solar-orange);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .edu-intro {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 80px 20px;
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        /* --- 4. 重點活動區塊 (交錯排版) --- */
+        .activity-section {
+            padding: 80px 5%;
+            border-bottom: 1px solid #222;
+        }
+
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 反轉排列 (用於偶數區塊) */
+        .split-layout.reverse {
+            direction: rtl; /* 簡單的左右互換技巧 */
+        }
+        .split-layout.reverse > * {
+            direction: ltr; /* 內容轉回來 */
+        }
+
+        .text-col h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .text-col .subtitle {
+            font-family: 'Teko', sans-serif;
+            color: var(--solar-orange);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .text-col p {
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        /* 重點數據/特色列表 */
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .feature-item {
+            border-left: 3px solid var(--solar-orange);
+            padding-left: 15px;
+        }
+        
+        .feature-item strong {
+            display: block;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .feature-item span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 圖片樣式 */
+        .img-col {
+            position: relative;
+        }
+        
+        .main-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: 0.3s;
+            filter: grayscale(20%);
+        }
+        
+        .img-col:hover .main-img {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+        }
+
+        /* --- 5. 國際交流 (網格展示) --- */
+        .grid-section {
+            padding: 100px 5%;
+            background: #111;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-header h2 { font-size: 3rem; color: white; }
+        .section-header span { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.5rem; }
+
+        .visit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .visit-card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 1px solid #333;
+        }
+        
+        .visit-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--solar-orange);
+        }
+
+        .visit-img {
+            width: 100%;
+            height: 250px; /* 加大圖片比例 */
+            object-fit: cover;
+        }
+
+        .visit-content { padding: 25px; }
+        .visit-date { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.2rem; margin-bottom: 5px; }
+        .visit-title { color: white; font-size: 1.3rem; margin-bottom: 10px; font-weight: 700; }
+        .visit-desc { color: #777; font-size: 0.95rem; }
+
+        /* --- Footer --- */
+        footer { 
+            padding: 50px 5%; 
+            background: #000; 
+            color: #666; 
+            text-align: center; 
+            border-top: 1px solid #222; 
+        }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .edu-hero h1 { font-size: 3.5rem; }
+            .split-layout { grid-template-columns: 1fr; gap: 40px; }
+            .split-layout.reverse { direction: ltr; } /* 手機版取消左右互換 */
+            .main-img { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="NKUST Apollo Logo" class="logo-img">
+            <div class="logo-text">NKUST <span>APOLLO</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">返回首頁</a></li>
+                <li><a href="index.html#about">關於車隊</a></li>
+                <li><a href="index.html#future">未來展望</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <div class="edu-hero">
+        <div class="edu-hero-bg"></div>
+        <span class="en-font" style="color:white; font-size:1.2rem; letter-spacing:3px; margin-bottom:10px;">SOCIAL RESPONSIBILITY</span>
+        <h1>扎根 STEAM 教育<br>推動綠能永續</h1>
+        <p>EMPOWERING THE NEXT GENERATION</p>
+    </div>
+
+    <div class="edu-intro">
+        <p>阿波羅車隊不只致力於賽道上的速度，更在乎技術的傳承。透過舉辦全國性競賽、親子營隊及大型科普活動，我們將淨零碳排的種子深植於下一代心中。</p>
+    </div>
+
+    <!-- Section 1: 高中職競賽 (左文右圖) -->
+    <section class="activity-section">
+        <div class="split-layout">
+            <div class="text-col">
+                <span class="subtitle">01. STEAM EDUCATION</span>
+                <h2>全國高中職<br>太陽能模型車競賽</h2>
+                <p>這不僅是一場比賽，更是全台灣高中職學生的工程啟蒙禮。引導學生從科學、技術、工程、數學等方面進行批判性思考，學習如何從零開始打造一輛會動的太陽能車。</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>20+ 屆歷史</strong>
+                        <span>台灣歷史最悠久的模型車賽事</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>8000+ 參賽學生</strong>
+                        <span>累計培育無數理工人才</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>接軌國際</strong>
+                        <span>優勝隊伍保送澳洲 AIMSC 總決賽</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>全方位考核</strong>
+                        <span>包含工程報告、面試與動態測試</span>
+                    </div>
+                </div>
+            </div>
+            <div class="img-col">
+                <!-- 這裡使用您的 steam4.png -->
+                <img src="steam4.png" alt="競賽起跑" class="main-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: 南科親子營 (右文左圖 -> 手機版自動轉正) -->
+    <section class="activity-section">
+        <div class="split-layout reverse">
+            <div class="text-col">
+                <span class="subtitle">02. HANDS-ON CAMP</span>
+                <h2>南科太陽能模型車<br>親子挑戰營</h2>
+                <p>針對國中小學生舉辦的「動手做」營隊。我們相信，透過親手組裝太陽能車與船，孩子們能更直觀地理解再生能源的運作原理。這是教育向下扎根的關鍵一步。</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>DIY 手作</strong>
+                        <span>太陽能車、船與水陸兩用車製作</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>偏鄉關懷</strong>
+                        <span>優先保留名額給偏遠地區學童</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>寓教於樂</strong>
+                        <span>結合闖關遊戲與綠能知識</span>
+                    </div>
+                </div>
+            </div>
+            <div class="img-col">
+                <!-- 這裡使用您的 南科1.png -->
+                <img src="南科1.png" alt="親子手作" class="main-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: 科普推廣 (左文右圖) -->
+    <section class="activity-section">
+        <div class="split-layout">
+            <div class="text-col">
+                <span class="subtitle">03. PUBLIC OUTREACH</span>
+                <h2>走出校園<br>多元科普推廣</h2>
+                <p>阿波羅車隊積極參與各類大型展覽與市集，將深奧的光電技術轉化為民眾易懂的語言。從高雄市政府的教育節到衛武營的 Open House，都可以看到我們推廣綠能的身影。</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>常設展覽</strong>
+                        <span>科工館「技職新視界」展區</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>城市推廣</strong>
+                        <span>參與高雄教育節學市集</span>
+                    </div>
+                </div>
+            </div>
+            <div class="img-col">
+                <!-- 這裡使用您的 高市1.png -->
+                <img src="高市1.png" alt="科普解說" class="main-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: 國際交流 (卡片網格) -->
+    <section class="grid-section">
+        <div class="section-header">
+            <h2>國際交流與參訪</h2>
+            <span>GLOBAL CONNECTION</span>
+        </div>
+
+        <div class="visit-grid">
+            <!-- 加拿大參訪 -->
+            <div class="visit-card">
+                <img src="LINE_ALBUM_加拿大20251126_260121_1.jpg" alt="加拿大參訪" class="visit-img">
+                <div class="visit-content">
+                    <div class="visit-date">2025.11.26</div>
+                    <div class="visit-title">加拿大專業人士參訪</div>
+                    <div class="visit-desc">與來自加拿大的綠能專家進行深度技術交流，分享台灣在太陽能載具上的研發成果。</div>
+                </div>
+            </div>
+
+            <!-- 美國學校 -->
+            <div class="visit-card">
+                <img src="LINE_ALBUM_20251118美國學校參訪_260121_1.jpg" alt="美國學校" class="visit-img">
+                <div class="visit-content">
+                    <div class="visit-date">2025.11.18</div>
+                    <div class="visit-title">美國學校師生參訪</div>
+                    <div class="visit-desc">全程英語導覽，向國際學生介紹阿波羅車隊的歷史與工程技術，激發對科學的熱情。</div>
+                </div>
+            </div>
+
+            <!-- 義大國際 -->
+            <div class="visit-card">
+                <img src="LINE_ALBUM_義大國際高中國小部參訪_260121_1.jpg" alt="義大國際高中" class="visit-img">
+                <div class="visit-content">
+                    <div class="visit-date">2025.10.09</div>
+                    <div class="visit-title">義大國際高中國小部</div>
+                    <div class="visit-desc">小小工程師的啟蒙之旅，透過近距離接觸實車，在孩子心中種下永續能源的種子。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NKUST Apollo Solar Car Team. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

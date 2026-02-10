@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>榮耀戰績 History & Achievements | NKUST Apollo Solar Car Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. 核心設定 --- */
+        :root {
+            --bg-dark: #0a0a0a;       
+            --bg-panel: rgba(15, 15, 15, 0.95);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --solar-orange: #FF4400;
+            --solar-orange-glow: rgba(255, 68, 0, 0.6);
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. 導覽列 --- */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            height: 80px; 
+        }
+
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-img { height: 45px; width: auto; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; font-style: italic; color: white; line-height: 1; letter-spacing: 1px;}
+        .logo-text span { color: var(--solar-orange); }
+
+        nav { display: none; }
+
+        /* --- 3. Hero Section --- */
+        .page-header {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .header-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1504805572947-34fad45aed93?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            filter: grayscale(100%) brightness(0.4);
+            z-index: -1;
+        }
+
+        .page-header h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 8rem;
+            line-height: 0.8;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header p {
+            font-size: 1.5rem;
+            color: var(--solar-orange);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+        
+        .header-line {
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--solar-orange));
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* --- 4. 介紹文字 --- */
+        .intro-section {
+            padding: 100px 5% 60px 5%;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        .intro-section h2 { 
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            letter-spacing: 2px;
+            color: white; 
+            margin-bottom: 2rem; 
+            font-weight: 500;
+        }
+        .intro-section p { 
+            color: #ccc; 
+            font-size: 1.2rem;
+            line-height: 2;
+            border-left: 3px solid var(--solar-orange);
+            padding-left: 30px;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        /* --- 5. 動態賽道 Grid 佈局 --- */
+        .timeline-section {
+            padding: 180px 0 150px 0; 
+            position: relative;
+            /* 關鍵修正：確保 sticky 能夠在整個長度運作，移除可能限制它的 overflow 設定 */
+            overflow: visible; 
+        }
+
+        /* 賽道線 (Road) */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 180px; 
+            bottom: 0;
+            width: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-50%);
+            border-radius: 4px;
+            background-image: repeating-linear-gradient(to bottom, 
+                var(--solar-orange) 0%, 
+                var(--solar-orange) 20%, 
+                rgba(255,255,255,0.1) 20%, 
+                rgba(255,255,255,0.1) 40%);
+            background-size: 8px 100px;
+            z-index: 1;
+        }
+
+        /* --- [優化核心] CSS Sticky 車輛容器 --- */
+        /* 使用 position: sticky 是最流暢的做法，由瀏覽器原生處理 */
+        .central-car-wrapper {
+            position: sticky;
+            top: 50vh; /* 黏在視窗垂直正中間 */
+            width: 100%;
+            height: 0; /* 高度設為 0 以避免佔據排版空間 */
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            /* 修正：讓車子起始位置對齊賽道起點 (top: 180px) */
+            /* 這樣當 timeline-section 捲動時，車子會在碰到 50vh 線時吸附住 */
+            margin-top: 0px; 
+        }
+
+        .central-car-img {
+            width: 140px; 
+            height: auto;
+            max-height: 160px;
+            object-fit: contain;
+            /* 垂直置中修正：將圖片中心點對齊 wrapper 的基準線 */
+            transform: translateY(-50%); 
+            filter: drop-shadow(0 0 15px rgba(255, 68, 0, 0.4));
+            z-index: 51;
+            /* 加入一點點 CSS 過渡讓微幅移動更柔和，但不會像 JS 那麼卡 */
+            transition: transform 0.1s ease-out;
+        }
+        
+        /* Grid 佈局核心 */
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 180px 1fr;
+            align-items: center;
+            margin-bottom: 200px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            z-index: 10;
+            width: 98%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+        /* 內容卡片樣式 */
+        .timeline-content {
+            background: var(--bg-panel);
+            padding: 50px 60px;
+            border-radius: 4px;
+            border-left: 1px solid var(--border-light);
+            border-right: 1px solid var(--border-light);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 92%; 
+            position: relative;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--solar-orange);
+            background: rgba(20, 20, 20, 1);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            grid-column: 1;
+            justify-self: end;
+            text-align: right;
+            margin-left: 20px;
+            border-right: none;
+            border-left: 4px solid var(--solar-orange);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            grid-column: 3;
+            justify-self: start; 
+            text-align: left;
+            margin-right: 20px;
+            border-left: none;
+            border-right: 4px solid var(--solar-orange);
+        }
+
+        /* 連接線 */
+        .connector {
+            position: absolute;
+            top: 50%;
+            width: 100px; 
+            height: 1px;
+            background: var(--solar-orange);
+            opacity: 0.3;
+        }
+
+        .timeline-item:nth-child(odd) .connector {
+            right: 50%;
+            margin-right: -90px; 
+            transform: rotate(180deg); 
+            transform-origin: left;
+            left: auto;
+        }
+
+        .timeline-item:nth-child(even) .connector {
+            left: 50%;
+            margin-left: -10px; 
+        }
+
+        /* 內容細節 */
+        .year-big {
+            font-family: 'Teko', sans-serif;
+            font-size: 10rem;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.05);
+            position: absolute;
+            top: -80px;
+            font-weight: 700;
+            line-height: 1;
+            pointer-events: none;
+            z-index: -1;
+            letter-spacing: -2px;
+        }
+        .timeline-item:nth-child(odd) .year-big { left: -20px; }
+        .timeline-item:nth-child(even) .year-big { right: -20px; }
+
+        .car-img-wrapper {
+            width: 100%;
+            height: 380px; 
+            background: #000;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .car-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            filter: grayscale(20%);
+        }
+        .timeline-content:hover .car-img { 
+            transform: scale(1.05); 
+            filter: grayscale(0%);
+        }
+        
+        /* 年份標籤 */
+        .timeline-year { 
+            color: var(--solar-orange); 
+            font-family: 'Teko', sans-serif; 
+            font-size: 2.5rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 0px;
+            line-height: 1;
+            font-weight: 500;
+        }
+        
+        /* 標題設計 */
+        .timeline-title { 
+            font-family: 'Teko', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 500; 
+            color: white; 
+            text-transform: uppercase; 
+            line-height: 0.9; 
+            margin-top: 5px; 
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, #bbb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-title {
+             background: linear-gradient(to left, #fff, #bbb);
+             -webkit-background-clip: text;
+        }
+        
+        /* 內文設計 */
+        .timeline-desc { 
+            color: #ddd; 
+            font-size: 1.25rem; 
+            line-height: 1.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .highlight-text { 
+            color: var(--solar-orange); 
+            font-weight: 500; 
+            border-bottom: 1px solid rgba(255, 68, 0, 0.3); 
+        }
+
+        .award-list {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .award-item {
+            color: #b0b0b0;
+            font-size: 1.1rem; 
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; 
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .timeline-item:nth-child(even) .award-item {
+             justify-content: flex-start; 
+        }
+
+        .award-item i {
+            color: var(--solar-orange);
+            margin-left: 20px; 
+            margin-right: 0;
+            font-size: 1rem; 
+            opacity: 0.8;
+        }
+        .timeline-item:nth-child(even) .award-item i {
+            margin-left: 0;
+            margin-right: 20px; 
+        }
+
+        .future-item .timeline-content {
+            border: 1px solid var(--solar-orange);
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95), rgba(40, 10, 0, 0.95));
+        }
+
+        /* --- 返回首頁按鈕 --- */
+        .back-to-home {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            color: var(--solar-orange);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            border: 2px solid var(--solar-orange);
+            z-index: 2000;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+        
+        .back-to-home:hover {
+            transform: scale(1.1);
+            background: var(--solar-orange);
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 68, 0, 0.4);
+        }
+        
+        .back-to-home .tooltip {
+            position: absolute;
+            right: 75px;
+            background: var(--solar-orange);
+            color: white;
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .back-to-home:hover .tooltip {
+            opacity: 1;
+            right: 70px;
+        }
+
+        footer { 
+            padding: 80px 5%; 
+            background: #000; 
+            border-top: 1px solid #222;
+            color: white; 
+            display: grid; 
+            grid-template-columns: 1fr auto; 
+            position: relative;
+            z-index: 100;
+        }
+        .footer-info h4 { font-family: 'Teko', sans-serif; font-size: 2rem; margin-bottom: 1rem; color: var(--solar-orange);}
+        .footer-info p { color: #666; font-size: 0.9rem;}
+        .footer-social a { color: white; margin-left: 20px; font-size: 0.9rem; opacity: 0.5; transition: 0.3s; }
+        .footer-social a:hover { opacity: 1; color: var(--solar-orange); }
+
+        @media (max-width: 900px) {
+            .page-header h1 { font-size: 4.5rem; }
+            .timeline-line { display: none; } 
+            .central-car-wrapper { display: none; } 
+            
+            .timeline-item { 
+                display: flex;
+                flex-direction: column !important; 
+                align-items: center; 
+                margin-bottom: 80px;
+                padding: 0 15px; 
+                grid-template-columns: 1fr; 
+            }
+
+            .timeline-content { 
+                width: 100%; 
+                max-width: 100%;
+                text-align: left !important;
+                padding: 30px;
+                border-left: none !important;
+                border-right: none !important;
+                border-top: 4px solid var(--solar-orange);
+            }
+
+            .connector { display: none; }
+            .year-big { left: 10px !important; right: auto !important; font-size: 5rem; top: -30px; opacity: 0.5; }
+            
+            .timeline-item:nth-child(odd) .timeline-content { text-align: left; margin-left: 0; border-left: none; }
+            .timeline-item:nth-child(even) .timeline-content { margin-right: 0; border-right: none;}
+            
+            .award-item { justify-content: flex-start !important; }
+            .award-item i { margin-left: 0 !important; margin-right: 15px !important; order: -1; } 
+            
+            .timeline-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html" class="logo-link">
+                <img src="logo.png" alt="NKUST Apollo Logo" class="logo-img" style="filter: invert(1);">
+                <div class="logo-text">NKUST <span>APOLLO</span></div>
+            </a>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <div class="header-bg"></div>
+        <h1>LEGACY</h1>
+        <p>行駛後的胎紋 — 每一代都是傳奇的累積</p>
+        <div class="header-line"></div>
+    </div>
+
+    <section class="intro-section">
+        <h2>HISTORY & EVOLUTION</h2>
+        <p>
+            透過每一次競賽，我們不斷累積經驗，檢視團隊可以精進的方向，在實作中學習挑戰中成長。我們將這些經驗與技術轉化為與產業合作的基礎，邁向量產市售太陽能車的目標。
+        </p>
+    </section>
+
+    <section class="timeline-section" id="timelineSection">
+        <!-- 賽道線 -->
+        <div class="timeline-line" id="timelineLine"></div>
+
+        <!-- Sticky Car (已還原為最順暢的 CSS Sticky 模式，並使用原圖 good.png) -->
+        <div class="central-car-wrapper" id="centralCar">
+            <img src="good.png" 
+                 alt="Central Leading Car" 
+                 class="central-car-img">
+        </div>
+
+        <!-- 1998 Apollo I -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">1998</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 1.png" alt="Apollo I" class="car-img">
+                </div>
+                <div class="timeline-year">1998</div>
+                <h3 class="timeline-title">Apollo I <br>夢想啟程</h3>
+                <p class="timeline-desc">
+                    國內第一輛太陽能車，象徵夢想啟航！以太空船式的造型，被媒體讚譽形容為「長翅膀的太陽能車」。開啟了高科大阿波羅車隊的傳奇篇章。
+                </p>
+            </div>
+        </div>
+
+        <!-- 1999 Apollo II -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">1999</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 2.png" alt="Apollo II" class="car-img">
+                </div>
+                <div class="timeline-year">1999</div>
+                <h3 class="timeline-title">Apollo II <br>逐步成長</h3>
+                <p class="timeline-desc">
+                    國內首次製作<span class="highlight-text">可撓性太陽電池模組</span>並披覆在車體外表，使太陽能車具備實際功能。
+                </p>
+            </div>
+        </div>
+
+        <!-- 2002 Apollo III -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2002</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 3.png" alt="Apollo III" class="car-img">
+                </div>
+                <div class="timeline-year">2002</div>
+                <h3 class="timeline-title">Apollo III <br>放眼國際</h3>
+                <p class="timeline-desc">
+                    台灣700公里「太陽能車-南北走透透」。應用航太工程的<span class="highlight-text">三明治複合材料結構</span>，大幅輕量化車體。
+                </p>
+            </div>
+        </div>
+
+        <!-- 2003-2004 Apollo IV -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2003</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 4.png.jpg" alt="Apollo IV" class="car-img">
+                </div>
+                <div class="timeline-year">2003 - 2004</div>
+                <h3 class="timeline-title">Apollo IV <br>一鳴驚人</h3>
+                <p class="timeline-desc">
+                    打破台灣參加世界太陽能車競賽的零紀錄，披覆高效率砷化鎵太陽電池，展現強大競爭力。
+                </p>
+                <div class="award-list">
+                    <div class="award-item">2003 澳洲 世界太陽能車挑戰賽 第七名 <i class="fas fa-flag-checkered"></i></div>
+                    <div class="award-item">2004 希臘 世界太陽能車拉力賽 第四名 <i class="fas fa-trophy"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2005-2006 Apollo IV plus -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2005</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 4.png.jpg" alt="Apollo IV plus" class="car-img">
+                </div>
+                <div class="timeline-year">2005 - 2006</div>
+                <h3 class="timeline-title">Apollo IV plus <br>持續深耕</h3>
+                <p class="timeline-desc">
+                    持續優化設計，在亞洲區賽事中展現穩定實力。
+                </p>
+                <div class="award-list">
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2005 日本 鈴鹿夢幻盃 第九名</div>
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2006 臺灣 世界太陽能車拉力賽 第五名</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2005-2008 Apollo V -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2008</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 5.png.jpg" alt="Apollo V" class="car-img">
+                </div>
+                <div class="timeline-year">2005 - 2008</div>
+                <h3 class="timeline-title">Apollo V <br>極致工藝</h3>
+                <p class="timeline-desc">
+                    全球參賽最多、獲獎最豐的傳奇車款。全車碳纖一體成形，展現低風阻設計極限。
+                </p>
+                <div class="award-list">
+                    <div class="award-item">2005 澳洲 世界太陽能車挑戰賽 第七名 <i class="fas fa-flag-checkered"></i></div>
+                    <div class="award-item">2006 臺灣 世界太陽能車拉力賽 第二名 <i class="fas fa-trophy"></i></div>
+                    <div class="award-item">2006 日本 鈴鹿夢幻盃 第四名 <i class="fas fa-flag-checkered"></i></div>
+                    <div class="award-item">2007 澳洲 世界太陽能車挑戰賽 冒險組第二名 <i class="fas fa-trophy"></i></div>
+                    <div class="award-item">2007 日本 鈴鹿夢幻盃 第二名 <i class="fas fa-trophy"></i></div>
+                    <div class="award-item">2008 日本 鈴鹿夢幻盃 第二名 <i class="fas fa-trophy"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2010-2015 Apollo VI -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2010</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 6.png.jpg" alt="Apollo VI" class="car-img">
+                </div>
+                <div class="timeline-year">2010 - 2015</div>
+                <h3 class="timeline-title">Apollo VI <br>極致工藝</h3>
+                <p class="timeline-desc">
+                    亞洲首支完成美國太陽能車挑戰賽程的車隊。
+                </p>
+                <div class="award-list">
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2010 美國 太陽方程式大獎 第五名</div>
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2010 美國 道路賽 第七名</div>
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2011 澳洲 世界太陽能車挑戰賽 第九名</div>
+                    <div class="award-item"><i class="fas fa-trophy"></i> 2015 阿布達比 太陽能車挑戰賽 第二名</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2013 Apollo VII -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2013</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 7.png.jpg" alt="Apollo VII" class="car-img">
+                </div>
+                <div class="timeline-year">2013</div>
+                <h3 class="timeline-title">Apollo VII <br>商轉概念</h3>
+                <p class="timeline-desc">
+                    台灣第一部掛牌上路的太陽能車！轉型發展「都市型」商用目標。
+                </p>
+                <div class="award-list">
+                    <div class="award-item">2013 澳洲 世界太陽能車挑戰賽 巡航組第六名 <i class="fas fa-flag-checkered"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2017 Apollo VIII -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2017</span>
+                <div class="car-img-wrapper">
+                    <img src="apollo 8.png.jpg" alt="Apollo VIII" class="car-img">
+                </div>
+                <div class="timeline-year">2017</div>
+                <h3 class="timeline-title">Apollo VIII <br>台灣實力</h3>
+                <p class="timeline-desc">
+                    與普利司通合作採用 Ecopia Ologic 低風阻輪胎。採用智慧型無風扇嵌入式車載系統。
+                </p>
+                <div class="award-list">
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2017 澳洲 世界太陽能車挑戰賽 巡航組第六名</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2023 Apollo IX -->
+        <div class="timeline-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big">2023</span>
+                <div class="car-img-wrapper">
+                    <img src="https://media.gq.com.tw/photos/654de7d82a421f4b0db574bf/1:1/w_800,h_800,c_limit/S__153001993.jpg" alt="Apollo IX" class="car-img">
+                </div>
+                <div class="timeline-year">2023</div>
+                <h3 class="timeline-title">Apollo IX <br>登峰造極</h3>
+                <p class="timeline-desc">
+                    全球最接近商轉的太陽能車！內裝使用回收碳纖維再製。
+                </p>
+                <div class="award-list">
+                    <div class="award-item">2023 澳洲世界太陽能車挑戰賽 巡航組第四名 <i class="fas fa-flag-checkered"></i></div>
+                    <div class="award-item">2023 世界實用性 第二名 <i class="fas fa-trophy"></i></div>
+                    <div class="award-item">2023 精密重量獎 <i class="fas fa-medal"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2025 Apollo IX plus -->
+        <div class="timeline-item future-item">
+            <div class="connector"></div>
+            <div class="timeline-content">
+                <span class="year-big" style="color:rgba(255,255,255,0.02); -webkit-text-stroke: 1px var(--solar-orange);">2025</span>
+                <div class="car-img-wrapper">
+                    <img src="https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2025/08/25/realtime/32990349.jpg&x=0&y=0&sw=0&sh=0&exp=3600" alt="Apollo IX Plus" class="car-img" style="filter: none;">
+                </div>
+                <div class="timeline-year" style="color:white; background:var(--solar-orange); padding:2px 10px; font-size: 2rem;">2025</div>
+                <h3 class="timeline-title" style="background: none; -webkit-text-fill-color: var(--solar-orange); color: var(--solar-orange);">Apollo IX plus <br>逆風飛翔</h3>
+                <p class="timeline-desc" style="color:white;">
+                    澳洲世界太陽能車挑戰賽首次冬季舉辦。
+                </p>
+                 <div class="award-list" style="border-top-color: rgba(255,68,0,0.3);">
+                    <div class="award-item"><i class="fas fa-trophy"></i> 2025 澳洲 世界太陽能車挑戰賽 場內賽 巡航組第二名</div>
+                    <div class="award-item"><i class="fas fa-flag-checkered"></i> 2025 澳洲 世界太陽能車挑戰賽 道路賽 巡航組第四名</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 返回首頁按鈕 -->
+    <a href="index.html" class="back-to-home">
+        <i class="fas fa-home"></i>
+        <div class="tooltip">回首頁</div>
+    </a>
+
+    <footer>
+        <div class="footer-info">
+            <h4>NKUST APOLLO</h4>
+            <p>國立高雄科技大學 再生能源館<br>Kaohsiung, Taiwan</p>
+            <br>
+            <p>Email: apollosolarcar@nkust.edu.tw</p>
+            <p style="margin-top:20px;">&copy; 2025 NKUST Apollo. All Rights Reserved.</p>
+        </div>
+        <div class="footer-social">
+            <a href="https://www.facebook.com/ApolloSolarCarTeam">FACEBOOK</a>
+            <a href="https://www.instagram.com/apollo_solar_car">INSTAGRAM</a>
+            <a href="#">YOUTUBE</a>
+        </div>
+    </footer>
+
+    <script>
+        // 僅保留卡片淡入動畫，移除所有滾動控制 JS，解決卡頓問題
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+
+</body>
+</html>

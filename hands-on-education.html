@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實戰教育 | NKUST Apollo 跨領域合作</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. 核心色票 --- */
+        :root {
+            --bg-dark: #050505;       
+            --bg-white: #ffffff;      
+            --text-main: #222222;
+            --text-muted: #666666;
+            --solar-orange: #FF4400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        .en-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 2. 導覽列 --- */
+        header {
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 40px; width: auto; }
+        .logo-text { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); }
+
+        .back-nav a { 
+            color: #bbb; font-family: 'Teko', sans-serif; font-size: 1.2rem; letter-spacing: 1px; 
+            border: 1px solid rgba(255,255,255,0.3); padding: 5px 20px; border-radius: 50px;
+        }
+        .back-nav a:hover { background: var(--solar-orange); color: white; border-color: var(--solar-orange); }
+
+        /* --- 3. 頁面 Hero --- */
+        .page-hero {
+            height: 60vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background-image: url('團隊合作.JPG'); 
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 0;
+        }
+
+        .page-hero::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1;
+        }
+
+        .hero-text { position: relative; z-index: 2; max-width: 900px; padding: 0 20px;}
+        .hero-text h1 {
+            font-family: 'Teko', sans-serif; font-size: 5rem; font-weight: 600; line-height: 1; margin-bottom: 10px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero-text p { font-size: 1.5rem; font-weight: 300; letter-spacing: 2px; color: var(--solar-orange); }
+
+        /* --- 4. 內容區塊 --- */
+        .content-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+
+        .intro-block {
+            text-align: center; margin-bottom: 80px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        .intro-block h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+        .intro-block h2 span { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.5rem; display: block; margin-bottom: 5px; letter-spacing: 2px; }
+        .intro-block p { color: var(--text-muted); font-size: 1.1rem; text-align: justify; margin-bottom: 20px;}
+
+        /* --- 5. 交錯式時間軸 (Zig-zag Timeline) --- */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto 120px auto;
+            padding: 20px 0;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #eee;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-block {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-block.left { left: 0; text-align: right; }
+        .timeline-block.right { left: 50%; text-align: left; }
+
+        .timeline-block::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--bg-white);
+            border: 4px solid var(--solar-orange);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-block.right::after { left: -10px; }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: #f9f9f9;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .timeline-content:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+
+        .timeline-year {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.5rem;
+            color: var(--solar-orange);
+            line-height: 1;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: 600;
+        }
+        .timeline-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: #333; }
+        .timeline-desc { font-size: 0.95rem; color: #666; }
+
+        /* --- 6. 指導教授區塊 --- */
+        .mentor-section {
+            background: #111;
+            color: white;
+            padding: 80px 5%;
+            margin-bottom: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mentor-container {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: center;
+        }
+        .mentor-img {
+            width: 100%; border-radius: 4px; filter: grayscale(100%); transition: 0.5s;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .mentor-container:hover .mentor-img { filter: grayscale(0%); }
+        
+        .mentor-text h3 {
+            font-family: 'Teko', sans-serif; font-size: 3rem; color: white; margin-bottom: 10px; line-height: 1;
+        }
+        .mentor-text h4 {
+            color: var(--solar-orange); font-size: 1.2rem; margin-bottom: 20px; font-weight: 500; letter-spacing: 1px;
+        }
+        .mentor-text p {
+            color: #aaa; font-size: 1.1rem; margin-bottom: 20px; text-align: justify;
+        }
+        .quote {
+            border-left: 3px solid var(--solar-orange);
+            padding-left: 20px;
+            margin-top: 30px;
+            font-style: italic;
+            color: #fff;
+        }
+
+        /* --- 7. 組別介紹 (Zig-zag) --- */
+        .feature-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 100px; align-items: center;
+        }
+        .feature-row.reverse .feature-img-box { order: 2; }
+        .feature-row.reverse .feature-text-box { order: 1; }
+
+        .feature-img-box {
+            position: relative; overflow: hidden; border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); height: 350px;
+        }
+        .feature-img-box img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
+        }
+        .feature-img-box:hover img { transform: scale(1.05); }
+
+        .feature-text-box h3 {
+            font-size: 2rem; font-weight: 700; margin-bottom: 15px; line-height: 1.3;
+        }
+        .feature-text-box h3 span { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.4rem; margin-right: 10px; }
+        .feature-text-box p { color: #555; margin-bottom: 20px; font-size: 1.05rem; }
+        
+        .styled-list { list-style: none; padding-left: 0; }
+        .styled-list li { margin-bottom: 8px; color: #444; position: relative; padding-left: 20px; font-size: 0.95rem; }
+        .styled-list li::before {
+            content: '●'; color: var(--solar-orange); position: absolute; left: 0; font-size: 0.6rem; top: 2px;
+        }
+
+        /* --- Team CTA Button --- */
+        .team-cta-container { text-align: center; margin-top: 60px; padding: 40px; background: #f9f9f9; border-radius: 8px; }
+        .cta-btn {
+            display: inline-block; padding: 15px 50px; background: var(--solar-orange); color: white;
+            font-size: 1.2rem; font-weight: bold; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(255, 68, 0, 0.3); transition: 0.3s;
+        }
+        .cta-btn:hover { background: #e65c00; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255, 68, 0, 0.4); }
+
+        /* --- Footer --- */
+        footer { 
+            padding: 60px 5%; background: #111; color: white; text-align: center; border-top: 4px solid var(--solar-orange);
+        }
+        .footer-btn {
+            display: inline-block; margin-top: 20px; padding: 12px 40px; background: transparent; 
+            border: 1px solid #555; color: #aaa; font-weight: bold; border-radius: 50px; transition: 0.3s;
+        }
+        .footer-btn:hover { border-color: var(--solar-orange); color: var(--solar-orange); }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .hero-text h1 { font-size: 3.5rem; }
+            
+            /* 時間軸 RWD: 變回單欄 */
+            .timeline-container::after { left: 31px; }
+            .timeline-block { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-block::after { left: 21px; }
+            .timeline-block.left { text-align: left; }
+            .timeline-block.right { left: 0; }
+
+            .mentor-container { grid-template-columns: 1fr; }
+            .feature-row { grid-template-columns: 1fr; gap: 30px; margin-bottom: 60px; }
+            .feature-row.reverse .feature-img-box { order: 0; }
+            .feature-row.reverse .feature-text-box { order: 1; }
+            .feature-img-box { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <div class="logo-text">NKUST <span>APOLLO</span></div>
+        </div>
+        <div class="back-nav">
+            <a href="index.html#about">BACK TO HOME</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="page-hero">
+        <div class="hero-text">
+            <h1>HANDS-ON EDUCATION</h1>
+            <p>實戰教育：跨領域整合與技術落地</p>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <section class="content-section">
+        
+        <!-- Intro -->
+        <div class="intro-block">
+            <h2><span>GLOBAL VISION</span>發展目標與國際視野</h2>
+            <p>
+                阿波羅太陽能車隊作為工程人才的培育基地，致力於將學術理論轉化為實際技術。透過參與世界太陽能車挑戰賽，我們與國際頂尖學府交流競技，驗證機電整合、複合材料與能源管理技術，並將實戰經驗回饋於教學與產業應用。
+            </p>
+        </div>
+
+        <!-- 5. History Timeline (Zig-zag) -->
+        <div class="timeline-container">
+            <!-- Item 1 (Left) -->
+            <div class="timeline-block left">
+                <div class="timeline-content">
+                    <span class="timeline-year">1998</span>
+                    <div class="timeline-title">成立初期</div>
+                    <div class="timeline-desc">
+                        在艾和昌教授帶領下，車隊正式成立。初期面臨技術資源與資金的挑戰，師生團隊從零開始摸索太陽能車設計與製造流程，建立起「實作驗證」的團隊文化。
+                    </div>
+                </div>
+            </div>
+            <!-- Item 2 (Right) -->
+            <div class="timeline-block right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2003 - 2011</span>
+                    <div class="timeline-title">競速車款研發</div>
+                    <div class="timeline-desc">
+                        專注於單人座競速組 (Challenger Class) 車輛開發。透過持續優化電力系統與車體輕量化技術，陸續推出阿波羅五號與六號，並多次參與國際賽事，積累工程數據。
+                    </div>
+                </div>
+            </div>
+            <!-- Item 3 (Left) -->
+            <div class="timeline-block left">
+                <div class="timeline-content">
+                    <span class="timeline-year">2012 - 2013</span>
+                    <div class="timeline-title">技術轉型：都市巡航</div>
+                    <div class="timeline-desc">
+                        配合賽事規則變革與實用化趨勢，團隊轉型研發雙人座巡航組 (Cruiser Class) 車款。完成阿波羅七號開發，首度挑戰貼近一般道路駕駛情境的車輛設計。
+                    </div>
+                </div>
+            </div>
+            <!-- Item 4 (Right) -->
+            <div class="timeline-block right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2023 - 2025</span>
+                    <div class="timeline-title">近期賽事成績</div>
+                    <div class="timeline-desc">
+                        以 Apollo IX 及優化版 IX Plus 參加澳洲世界太陽能車挑戰賽。在巡航組連續兩屆取得世界第四名的成績，展現團隊在長距離行駛與極端氣候下的系統穩定性。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 6. 指導教授區塊 -->
+    <div class="mentor-section">
+        <div class="mentor-container">
+            <div class="mentor-img-box">
+                <img src="教授.jpg" alt="艾和昌教授" class="mentor-img">
+            </div>
+            <div class="mentor-text">
+                <h3>FACULTY ADVISOR</h3>
+                <h4>阿波羅車隊創辦人 / 艾和昌 教授</h4>
+                <p>
+                    艾和昌教授是車隊的創辦人與主要指導老師。他秉持「做中學」的教育理念，提供技術諮詢與資源整合。
+                </p>
+                <p>
+                    在車隊運作中，艾教授強調學生應具備獨立思考與解決問題的能力。他在關鍵的工程決策與專案方向上給予指導，確保學生能將課堂知識正確應用於實際車輛開發中。
+                </p>
+                <div class="quote">
+                    "Engineering education is about applying knowledge to solve real-world problems."
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <!-- Team Intro (Zig-zag Layout) -->
+        <div class="intro-block" style="margin-bottom: 40px;">
+            <h2><span>FUNCTIONAL GROUPS</span>職能分組介紹</h2>
+            <p>車隊依據專業職能分為三大組別，成員來自不同科系，透過分工合作完成車輛設計與製造。</p>
+        </div>
+
+        <!-- 1. 行政組 -->
+        <div class="feature-row">
+            <div class="feature-img-box">
+                <img src="行政組.JPG" alt="行政組活動照">
+            </div>
+            <div class="feature-text-box">
+                <h3><span>ADMINISTRATION</span>行政組</h3>
+                <p>
+                    負責車隊的營運管理與對外事務，確保專案按進度執行並維持良好的對外形象。
+                </p>
+                <ul class="styled-list">
+                    <li>專案進度控管與文書檔案管理</li>
+                    <li>企業贊助洽談與合作廠商聯繫</li>
+                    <li>社群媒體經營與影音紀錄製作</li>
+                    <li>公關接待與國際交流事務</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2. 電力組 (Reverse) -->
+        <div class="feature-row reverse">
+            <div class="feature-img-box">
+                <img src="電力組.JPG" alt="電力組實作照">
+            </div>
+            <div class="feature-text-box">
+                <h3><span>POWER GROUP</span>電力組</h3>
+                <p>
+                    負責全車電力系統的設計與整合，涵蓋能量採集、儲存到動力輸出的完整電路規劃。
+                </p>
+                <ul class="styled-list">
+                    <li>電力系統控制電路設計與製作</li>
+                    <li>行車電腦監控系統與數據分析 (Telemetry)</li>
+                    <li>太陽能模組封裝與最大功率點追蹤 (MPPT)</li>
+                    <li>高壓電池組裝與電池管理系統 (BMS) 設定</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. 車體組 -->
+        <div class="feature-row">
+            <div class="feature-img-box">
+                <img src="車體組.JPG" alt="車體組實作照">
+            </div>
+            <div class="feature-text-box">
+                <h3><span>BODY & MECH</span>車體組</h3>
+                <p>
+                    負責車輛機械結構設計與複合材料製程，致力於打造輕量化且符合空氣力學的車體。
+                </p>
+                <ul class="styled-list">
+                    <li>碳纖維複合材料 (CFRP) 成型與製程</li>
+                    <li>懸吊系統幾何設計與車輛動態模擬</li>
+                    <li>外型空氣動力學分析 (CFD)</li>
+                    <li>機械零件 CNC 加工與車體結構組裝</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CTA Button to Team Page -->
+        <div class="team-cta-container">
+            <h3>車隊成員名單</h3>
+            <p style="color: #666; margin-bottom: 20px;">點擊下方按鈕，查看本屆核心幹部與成員介紹</p>
+            <a href="team.html" class="cta-btn">查看成員介紹 ➜</a>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>國立高雄科技大學 阿波羅太陽能車隊</p>
+        <a href="index.html#about" class="footer-btn">返回關於我們</a>
+        <p style="margin-top: 30px; font-size: 0.8rem; color: #555;">&copy; 2025 NKUST Apollo Solar Car Team</p>
+    </footer>
+
+</body>
+</html>

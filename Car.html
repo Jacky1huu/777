@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿波羅車系 | 高科大阿波羅太陽能車隊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- 1. 核心色票 --- */
+        :root {
+            --bg-dark: #0f0f0f;
+            --bg-light: #ffffff;
+            --text-dark: #111111;
+            --text-grey: #666666;
+            --solar-orange: #FF4400;
+            --divider: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        button { border: none; outline: none; cursor: pointer; }
+        img { display: block; width: 100%; height: auto; object-fit: cover; } 
+        ul { list-style: none; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 2. 導覽列 --- */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 1.5rem 3rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            mix-blend-mode: difference;
+            color: white;
+            pointer-events: none;
+        }
+        
+        header * { pointer-events: auto; }
+
+        .logo { 
+            font-size: 1.4rem; 
+            font-weight: 900; 
+            letter-spacing: 1px; 
+            font-style: italic; 
+            font-family: 'Oswald', sans-serif; 
+        }
+        .logo span { color: var(--solar-orange); }
+        
+        /* --- 3. Hero 區域 (5車展示 - 平滑過渡版) --- */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .panels-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 0;
+        }
+
+        /* Panel 通用樣式 */
+        .panel {
+            position: relative;
+            height: 100%;
+            flex: 0; 
+            min-width: 0;
+            cursor: pointer;
+            overflow: hidden;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transition: flex 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+        }
+
+        .panel:last-child { border-right: none; }
+
+        .panel.active { flex: 8; opacity: 1; cursor: default; z-index: 10; }
+        .panel.visible { flex: 1; opacity: 1; z-index: 5; }
+        .panel.hidden { flex: 0; opacity: 0; border-right: none; pointer-events: none; }
+
+        .panel-bg {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center center;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: scale(1);
+            z-index: 0;
+        }
+
+        .panel-overlay {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            transition: background 0.6s ease;
+            z-index: 1;
+        }
+
+        .panel.active .panel-bg { transform: scale(1.1); }
+        .panel.active .panel-overlay { background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 90%); }
+        .panel.visible:hover .panel-bg { filter: brightness(0.8); }
+
+        .panel-content-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .panel-label-vertical {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.4);
+            font-weight: 700;
+            letter-spacing: 5px;
+            white-space: nowrap;
+            transition: opacity 0.4s ease;
+            opacity: 1;
+        }
+
+        .panel.visible:hover .panel-label-vertical { color: var(--solar-orange); }
+        .panel.active .panel-label-vertical { opacity: 0; }
+        .panel.hidden .panel-label-vertical { opacity: 0; }
+
+        .panel-info-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -40%);
+            text-align: center;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+        }
+
+        .panel.active .panel-info-center {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-delay: 0.2s;
+            pointer-events: auto;
+        }
+
+        .info-year {
+            display: inline-block;
+            background: var(--solar-orange);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(255,69,0,0.4);
+        }
+
+        .info-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .info-btn {
+            font-size: 0.9rem;
+            color: #ddd;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--solar-orange);
+            padding-bottom: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .hero-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px; height: 60px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-size: 1.5rem;
+            cursor: pointer; z-index: 50;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .hero-nav:hover { background: var(--solar-orange); border-color: var(--solar-orange); transform: translateY(-50%) scale(1.1); }
+        .hero-nav.prev { left: 30px; }
+        .hero-nav.next { right: 30px; }
+
+        /* --- 4. 詳細資訊區塊 --- */
+        .details-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px;
+            opacity: 1;
+            transition: opacity 0.6s ease;
+        }
+        .details-container.fading { opacity: 0; }
+
+        .section-header {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--solar-orange);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .overview-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin-bottom: 80px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            column-gap: 80px;
+            row-gap: 40px;
+            margin-bottom: 100px;
+        }
+        .spec-category h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--text-grey);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--divider);
+            padding: 15px 0;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .spec-row:hover { background: #f9f9f9; padding-left: 10px; padding-right: 10px; }
+        .spec-row span:first-child { 
+            font-weight: 600; 
+            color: var(--text-dark); 
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .spec-row span:last-child { 
+            color: #444; 
+            text-align: right; 
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .unit { font-size: 0.8rem; color: #888; margin-left: 2px; }
+
+        /* --- 5. 榮耀時刻 --- */
+        .glory-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+            transition: 0.5s;
+        }
+        .glory-section {
+            margin-bottom: 100px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .glory-photo {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+        }
+        .glory-photo img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .glory-photo-label {
+            position: absolute;
+            bottom: 20px; left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .glory-content {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .glory-list {
+            list-style: none;
+        }
+        .glory-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+        .glory-item::before {
+            content: '\f091';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0; top: 2px;
+            color: var(--solar-orange);
+            font-size: 1.1rem;
+        }
+        .glory-item h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 5px;
+        }
+        .glory-item p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* --- 6. 底部導航 --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: center;
+            padding: 60px 0;
+            background-color: var(--bg-light);
+        }
+
+        .back-btn-large {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            border: 1px solid #ccc;
+            padding: 15px 40px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn-large:hover {
+            background: var(--text-dark);
+            color: var(--bg-light);
+            border-color: var(--text-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .glory-section { grid-template-columns: 1fr; }
+            .glory-photo { height: 300px; min-height: auto; }
+            .glory-content { padding: 30px; }
+        }
+
+        @media (max-width: 768px) {
+            .panels-container { flex-direction: column; }
+            .panel { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); flex: 1; opacity: 1; }
+            .panel.hidden { display: none; }
+            .panel-label-vertical { writing-mode: horizontal-tb; font-size: 1.5rem; letter-spacing: 3px; }
+            .info-title { font-size: 2.5rem; }
+            .hero-nav { width: 40px; height: 40px; font-size: 1rem; }
+            .panel.active { flex: 4; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NKUST <span>APOLLO</span></div>
+    </header>
+
+    <div class="hero-section">
+        <button class="hero-nav prev" onclick="shiftCars(-1)">&#10094;</button>
+        <div class="panels-container" id="panels-container"></div>
+        <button class="hero-nav next" onclick="shiftCars(1)">&#10095;</button>
+    </div>
+
+    <div class="details-container" id="details-section">
+        <section class="overview-section">
+            <div class="section-header" id="detail-name-header">概述</div>
+            <div class="overview-text">
+                <h2 style="margin-bottom: 20px; font-size: 2.5rem; font-family: 'Oswald', sans-serif;" id="detail-title">Loading...</h2>
+                <p id="detail-desc">請選擇上方車款以查看詳細資訊。</p>
+            </div>
+        </section>
+
+        <section class="specs-section">
+            <div class="section-header">工程規格 TECHNICAL SPECS</div>
+            <div class="specs-grid">
+                <div class="spec-column">
+                    <div class="spec-category">
+                        <h3>車體與結構 (Structure)</h3>
+                        <div class="spec-row">
+                            <span>長 x 寬 x 高 (LWH)</span>
+                            <span id="spec-dims">-</span>
+                        </div>
+                        <div class="spec-row">
+                            <span>車身淨重 (Weight)</span>
+                            <span id="spec-weight">-</span>
+                        </div>
+                        <div class="spec-row">
+                            <span>車體材質 (Material)</span>
+                            <span id="spec-material">-</span>
+                        </div>
+                         <div class="spec-row">
+                            <span>座位配置 (Seating)</span>
+                            <span id="spec-seats">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spec-column">
+                    <div class="spec-category">
+                        <h3>動力與性能 (Performance)</h3>
+                         <div class="spec-row">
+                            <span>太陽能模組 (Solar)</span>
+                            <span id="spec-solar">-</span>
+                        </div>
+                        <div class="spec-row">
+                            <span>電池容量 (Battery)</span>
+                            <span id="spec-battery">-</span>
+                        </div>
+                        <div class="spec-row">
+                            <span>風阻係數 (Drag Coeff.)</span>
+                            <span id="spec-drag">-</span>
+                        </div>
+                        <div class="spec-row">
+                            <span>最高時速 (Max Speed)</span>
+                            <span id="spec-speed">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glory-wrapper">
+            <div class="section-header">榮耀時刻 & 歷史身影</div>
+            <div class="glory-section">
+                <div class="glory-photo">
+                    <img id="glory-img" src="" alt="榮耀時刻">
+                    <div class="glory-photo-label" id="glory-label">TEAM PHOTO / AWARD MOMENT</div>
+                </div>
+                <div class="glory-content">
+                    <ul class="glory-list" id="glory-list"></ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="back-btn-large">
+            ← 返回主網站
+        </a>
+    </div>
+
+    <footer>
+        &copy; 2025 NKUST Apollo Solar Car Team. All Rights Reserved.
+    </footer>
+
+    <script>
+        const allCars = [
+            { 
+                id: 0, 
+                name: "Apollo I", 
+                year: "1998", 
+                desc: "國內第一輛太陽能車，象徵夢想啟航！以太空船式的造型，被媒體讚譽形容為「長翅膀的太陽能車」。初期以驗證光電轉換與車輛動態為目標。", 
+                img: "apollo 1.png",
+                awardImg: "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=800&q=80", 
+                specs: { 
+                    dims: "5.8 x 2.0 x 1.1 <span class='unit'>m</span>",
+                    weight: "450 <span class='unit'>kg</span>",
+                    material: "FRP 玻璃纖維",
+                    seats: "Single (單座)",
+                    solar: "單晶矽 (Silicon) <span class='unit'>16%</span>",
+                    battery: "鉛酸電池 (Lead-Acid) <span class='unit'>5 kWh</span>",
+                    drag: "0.28 <span class='unit'>Cd</span>",
+                    speed: "70 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "夢想啟程", desc: "1998年 - 國內第一輛太陽能車，象徵夢想啟航。" },
+                    { title: "媒體讚譽", desc: "以太空船造型，被譽為「長翅膀的太陽能車」。" }
+                ]
+            },
+            { 
+                id: 1, 
+                name: "Apollo II", 
+                year: "1999", 
+                desc: "逐步成長。國內首次製作可撓性太陽電池模組並披覆在車體外表。大幅降低車身高度並提升光電轉換效率，太陽能車方具功能，可對應國際賽規。", 
+                img: "apollo 2.png",
+                awardImg: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "5.5 x 1.8 x 1.0 <span class='unit'>m</span>",
+                    weight: "420 <span class='unit'>kg</span>",
+                    material: "鋁合金骨架 + FRP",
+                    seats: "Single (單座)",
+                    solar: "可撓式矽晶 (Flexible) <span class='unit'>17%</span>",
+                    battery: "鉛酸電池 <span class='unit'>4.8 kWh</span>",
+                    drag: "0.24 <span class='unit'>Cd</span>",
+                    speed: "85 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "技術突破", desc: "1999年 - 國內首次製作可撓性太陽電池模組並披覆在車體外表。" }
+                ]
+            },
+            { 
+                id: 2, 
+                name: "Apollo III", 
+                year: "2002", 
+                desc: "放眼國際，挑戰長征！國內首次完成台灣 700 公里南北走透透！車內駕駛座設計更符合人體工學，並特別在車體材料開始應用航太工程的三明治複合材料結構 (Honeycomb)，更加安全輕量。", 
+                img: "apollo 3.png",
+                awardImg: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "5.0 x 1.8 x 1.0 <span class='unit'>m</span>",
+                    weight: "380 <span class='unit'>kg</span>",
+                    material: "Nomex 蜂巢 + 碳纖",
+                    seats: "Single (單座)",
+                    solar: "高效單晶矽 <span class='unit'>19%</span>",
+                    battery: "鋰離子電池 (Li-Ion) <span class='unit'>5 kWh</span>",
+                    drag: "0.19 <span class='unit'>Cd</span>",
+                    speed: "100 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "放眼國際", desc: "2002年 - 台灣700公里「太陽能車-南北走透透」創舉。" }
+                ]
+            },
+            { 
+                id: 3, 
+                name: "Apollo IV", 
+                year: "2003", 
+                desc: "一鳴驚人！披覆高效率砷化鎵太陽電池，遠赴澳洲與希臘參賽。優異表現讓臺灣打破參加世界太陽能車競賽的零紀錄。", 
+                img: "apollo 4.png.jpg",
+                awardImg: "https://images.unsplash.com/photo-1561532325-7d5231a2dede?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "5.0 x 1.8 x 0.95 <span class='unit'>m</span>",
+                    weight: "320 <span class='unit'>kg</span>",
+                    material: "Carbon Fiber (CFRP)",
+                    seats: "Single (單座)",
+                    solar: "砷化鎵 (GaAs) <span class='unit'>24%</span>",
+                    battery: "鋰聚合物 (Li-Poly) <span class='unit'>5 kWh</span>",
+                    drag: "0.16 <span class='unit'>Cd</span>",
+                    speed: "120 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC 2003", desc: "2003年 澳洲 世界太陽能車挑戰賽 - 第七名。" },
+                    { title: "Phaethon 2004", desc: "2004年 希臘 世界太陽能車拉力賽 - 第四名。" }
+                ]
+            },
+            { 
+                id: 4, 
+                name: "Apollo V", 
+                year: "2005", 
+                desc: "極致工藝，持續深耕。流線外型呈現低風阻設計極限。全車體碳纖一體成形，大幅減輕重量，平均時速 130 公里下仍具優越穩定性。全球參加世界大賽最多的太陽能車！", 
+                img: "apollo 5.png.jpg",
+                awardImg: "https://images.unsplash.com/photo-1508197149814-0cc02e8b7f74?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.8 x 1.8 x 0.9 <span class='unit'>m</span>",
+                    weight: "260 <span class='unit'>kg</span>",
+                    material: "Carbon Monocoque",
+                    seats: "Single (單座)",
+                    solar: "砷化鎵 (GaAs) <span class='unit'>26%</span>",
+                    battery: "鋰離子電池 <span class='unit'>5 kWh</span>",
+                    drag: "0.13 <span class='unit'>Cd</span>",
+                    speed: "145 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC 2005", desc: "2005年 澳洲 世界太陽能車挑戰賽 - 第七名。" },
+                    { title: "Taiwan Rally 2006", desc: "2006年 臺灣 世界太陽能車拉力賽 - 第二名。" },
+                    { title: "Suzuka 2006", desc: "2006年 日本 鈴鹿夢幻盃 - 第四名。" },
+                    { title: "WSC 2007", desc: "2007年 澳洲 世界太陽能車挑戰賽 冒險組 - 第二名。" },
+                    { title: "Suzuka 2007/2008", desc: "2007、2008年 日本 鈴鹿夢幻盃 - 第二名。" }
+                ]
+            },
+            { 
+                id: 5, 
+                name: "Apollo VI", 
+                year: "2010", 
+                desc: "極致工藝再進化。獲禧通科技贊助高效率衛星級砷化鎵太陽電池，並由車隊自行封裝。亞洲車隊首次能完成美國太陽能車挑戰賽 (ASC) 賽程的隊伍！", 
+                img: "apollo 6.png.jpg",
+                awardImg: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.6 x 1.8 x 1.0 <span class='unit'>m</span>",
+                    weight: "240 <span class='unit'>kg</span>",
+                    material: "Pre-preg Carbon Fiber",
+                    seats: "Single (單座)",
+                    solar: "衛星級 GaAs <span class='unit'>28%</span>",
+                    battery: "NCA Li-Ion <span class='unit'>5 kWh</span>",
+                    drag: "0.12 <span class='unit'>Cd</span>",
+                    speed: "130 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "FSGP 2010", desc: "2010年 美國 太陽方程式大獎 - 第五名。" },
+                    { title: "ASC 2010", desc: "2010年 美國 道路賽 - 第七名。" },
+                    { title: "WSC 2011", desc: "2011年 澳洲 世界太陽能車挑戰賽 - 第九名。" },
+                    { title: "Abu Dhabi 2015", desc: "2015年 阿布達比 太陽能車挑戰賽 - 第二名。" }
+                ]
+            },
+            { 
+                id: 6, 
+                name: "Apollo VII", 
+                year: "2013", 
+                desc: "商轉概念的先驅。我國第一部掛牌上路的太陽能車！轉型發展「商用都會型」車輛。兩人座四輪，採具張力、低風阻的流線性造型設計。並自行開發車載雲端智慧運算平台，計算行駛最佳化策略。", 
+                img: "apollo 7.png.jpg",
+                awardImg: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.5 x 1.8 x 1.2 <span class='unit'>m</span>",
+                    weight: "320 <span class='unit'>kg</span>",
+                    material: "CFRP + Honeycomb",
+                    seats: "2 Seater (雙座)",
+                    solar: "SunPower Si <span class='unit'>22%</span>",
+                    battery: "LiFePO4 <span class='unit'>15 kWh</span>",
+                    drag: "0.18 <span class='unit'>Cd</span>",
+                    speed: "110 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC 2013", desc: "2013年 澳洲世界太陽能車挑戰賽 巡航組 - 第六名。" }
+                ]
+            },
+            { 
+                id: 7, 
+                name: "Apollo VIII", 
+                year: "2017", 
+                desc: "台灣實力。追求速度與節能平衡。使用碳纖複材車體結構達到輕量化，並獲 Bridgestone 贊助專用 Ecopia Ologic 車胎，有效降低空氣阻力。該車已採用智慧型無風扇嵌入式車載系統，提高可靠性。", 
+                img: "apollo 8.png.jpg",
+                awardImg: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.6 x 1.8 x 1.15 <span class='unit'>m</span>",
+                    weight: "300 <span class='unit'>kg</span>",
+                    material: "Ultra-Light Carbon",
+                    seats: "2 Seater (雙座)",
+                    solar: "SunPower Maxeon <span class='unit'>23%</span>",
+                    battery: "Panasonic 18650 <span class='unit'>18 kWh</span>",
+                    drag: "0.16 <span class='unit'>Cd</span>",
+                    speed: "120 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC 2017", desc: "2017年 澳洲世界太陽能車挑戰賽 巡航組 - 第六名。" }
+                ]
+            },
+            { 
+                id: 8, 
+                name: "Apollo IX", 
+                year: "2023", 
+                desc: "登峰造極。全球最接近商轉的太陽能車！全車採商用車工法。底盤與外型採用碳纖與蜂巢複合材料製作，內裝使用回收碳纖維。時速 75 公里時續航可超 1000 公里，1 度電可行駛 35 公里。", 
+                img: "https://media.gq.com.tw/photos/654de7d82a421f4b0db574bf/1:1/w_800,h_800,c_limit/S__153001993.jpg",
+                awardImg: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.8 x 1.9 x 1.2 <span class='unit'>m</span>",
+                    weight: "340 <span class='unit'>kg</span>",
+                    material: "Carbon / Recycled Interior",
+                    seats: "4 Seater (四座)",
+                    solar: "Mono-Si <span class='unit'>24.4%</span>",
+                    battery: "Li-Ion 21700 <span class='unit'>30 kWh</span>",
+                    drag: "0.14 <span class='unit'>Cd</span>",
+                    speed: "120 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC 2023", desc: "2023年 澳洲世界太陽能車挑戰賽 巡航組 - 第四名。" },
+                    { title: "實用性", desc: "2023年 世界實用性 - 第二名。" },
+                    { title: "特別獎", desc: "2023年 精密重量獎。" }
+                ]
+            },
+            { 
+                id: 9, 
+                name: "Apollo IX Plus", 
+                year: "2025", 
+                desc: "逆風飛翔。針對澳洲冬季賽事全面優化底盤與電力系統。在強烈側風與冰雹挑戰下完賽，最終綜合評比名列世界第四。", 
+                img: "https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2025/08/25/realtime/32990349.jpg&x=0&y=0&sw=0&sh=0&exp=3600",
+                awardImg: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80",
+                specs: { 
+                    dims: "4.8 x 1.9 x 1.2 <span class='unit'>m</span>",
+                    weight: "350 <span class='unit'>kg</span>",
+                    material: "Adv. Carbon Composite",
+                    seats: "4 Seater (四座)",
+                    solar: "High-Eff. Si <span class='unit'>25.1%</span>",
+                    battery: "Custom Pack <span class='unit'>40 kWh</span>",
+                    drag: "0.11 <span class='unit'>Cd</span>",
+                    speed: "130 <span class='unit'>km/h</span>"
+                },
+                awards: [
+                    { title: "WSC Track 2025", desc: "2025年 澳洲世界太陽能車挑戰賽 場內賽 巡航組 - 第二名。" },
+                    { title: "WSC Road 2025", desc: "2025年 澳洲世界太陽能車挑戰賽 道路賽 巡航組 - 第四名。" },
+                    { title: "總合成績", desc: "世界第四 (World #4)。" }
+                ]
+            }
+        ];
+
+        let centerIndex = 9; 
+        let isAnimating = false;
+        
+        const PANEL_COUNT = 5; 
+        const panelsContainer = document.getElementById('panels-container');
+        
+        function initPanels() {
+            panelsContainer.innerHTML = '';
+            for (let i = 0; i < PANEL_COUNT; i++) {
+                const div = document.createElement('div');
+                div.className = 'panel';
+                div.innerHTML = `
+                    <div class="panel-bg"></div>
+                    <div class="panel-overlay"></div>
+                    <div class="panel-content-layer">
+                        <div class="panel-label-vertical"></div>
+                        <div class="panel-info-center">
+                            <span class="info-year"></span>
+                            <h2 class="info-title"></h2>
+                            <span class="info-btn">查看詳情 ▼</span>
+                        </div>
+                    </div>
+                `;
+                div.onclick = () => {
+                    if (isAnimating) return;
+                    if (i === 1) shiftCars(-1);      
+                    else if (i === 3) shiftCars(1);  
+                };
+                panelsContainer.appendChild(div);
+            }
+        }
+
+        function renderPanels(offset = 0) {
+            const panels = panelsContainer.children;
+            const len = allCars.length;
+
+            for (let i = 0; i < PANEL_COUNT; i++) {
+                const carDataIndex = (centerIndex + (i - 2) + len) % len;
+                const car = allCars[carDataIndex];
+                const panel = panels[i];
+
+                const bg = panel.querySelector('.panel-bg');
+                if (!bg.style.backgroundImage.includes(car.img)) {
+                    bg.style.backgroundImage = `url('${car.img}')`;
+                }
+                
+                panel.querySelector('.panel-label-vertical').innerText = car.name;
+                panel.querySelector('.info-year').innerText = car.year;
+                panel.querySelector('.info-title').innerText = car.name;
+
+                panel.classList.remove('active', 'visible', 'hidden');
+                
+                if (i === 2) panel.classList.add('active');       
+                else if (i === 1 || i === 3) panel.classList.add('visible'); 
+                else panel.classList.add('hidden');               
+            }
+            
+            updateDetails(allCars[centerIndex]);
+        }
+
+        function shiftCars(direction) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const panels = panelsContainer.children;
+            
+            for(let p of panels) {
+                p.style.transition = "flex 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease";
+            }
+
+            if (direction === 1) {
+                panels[0].classList.add('hidden'); 
+                panels[1].classList.remove('visible'); panels[1].classList.add('hidden'); 
+                panels[2].classList.remove('active'); panels[2].classList.add('visible'); 
+                panels[3].classList.remove('visible'); panels[3].classList.add('active'); 
+                panels[4].classList.remove('hidden'); panels[4].classList.add('visible'); 
+            } else { 
+                panels[4].classList.add('hidden');
+                panels[3].classList.remove('visible'); panels[3].classList.add('hidden');
+                panels[2].classList.remove('active'); panels[2].classList.add('visible');
+                panels[1].classList.remove('visible'); panels[1].classList.add('active'); 
+                panels[0].classList.remove('hidden'); panels[0].classList.add('visible');
+            }
+
+            const nextIndex = (centerIndex + direction + allCars.length) % allCars.length;
+            updateDetails(allCars[nextIndex]);
+
+            setTimeout(() => {
+                for(let p of panels) {
+                    p.style.transition = "none";
+                }
+                centerIndex = nextIndex;
+                renderPanels();
+
+                setTimeout(() => {
+                    for(let p of panels) {
+                        p.style.transition = "flex 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease";
+                    }
+                    isAnimating = false;
+                }, 50);
+
+            }, 800); 
+        }
+
+        function updateDetails(car) {
+            const container = document.getElementById('details-section');
+            const nameHeader = document.getElementById('detail-name-header');
+            const title = document.getElementById('detail-title');
+            const desc = document.getElementById('detail-desc');
+            const gloryList = document.getElementById('glory-list');
+            const gloryImg = document.getElementById('glory-img');
+            
+            const specDims = document.getElementById('spec-dims');
+            const specWeight = document.getElementById('spec-weight');
+            const specMaterial = document.getElementById('spec-material');
+            const specSeats = document.getElementById('spec-seats');
+            const specSolar = document.getElementById('spec-solar');
+            const specBattery = document.getElementById('spec-battery');
+            const specDrag = document.getElementById('spec-drag');
+            const specSpeed = document.getElementById('spec-speed');
+
+            container.classList.add('fading');
+            
+            setTimeout(() => {
+                nameHeader.innerText = `概述: ${car.name}`;
+                title.innerText = `${car.name} (${car.year})`;
+                desc.innerText = car.desc;
+                
+                specDims.innerHTML = car.specs.dims;
+                specWeight.innerHTML = car.specs.weight;
+                specMaterial.innerText = car.specs.material;
+                specSeats.innerText = car.specs.seats;
+                specSolar.innerHTML = car.specs.solar;
+                specBattery.innerHTML = car.specs.battery;
+                specDrag.innerHTML = car.specs.drag;
+                specSpeed.innerHTML = car.specs.speed;
+
+                gloryImg.src = car.awardImg || car.img; 
+                gloryList.innerHTML = car.awards.map(award => `
+                    <li class="glory-item">
+                        <h4>${award.title}</h4>
+                        <p>${award.desc}</p>
+                    </li>
+                `).join('');
+
+                container.classList.remove('fading');
+            }, 400); 
+        }
+
+        initPanels();
+        renderPanels(); 
+
+    </script>
+</body>
+</html>

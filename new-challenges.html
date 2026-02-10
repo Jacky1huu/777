@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo IX 環島計畫 | NKUST Apollo Solar Car Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- 核心設定 (Dark Theme) --- */
+        :root {
+            --bg-dark: #050505;       
+            --bg-section: #111111;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --solar-orange: #FF4400;
+            --highlight-blue: #00A3FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .en-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 導覽列 --- */
+        header {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 50px; width: auto; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); }
+
+        nav ul { display: flex; gap: 1.5rem; }
+        nav a { color: #bbb; font-size: 0.95rem; font-weight: 500; letter-spacing: 1px; position: relative; }
+        nav a:hover { color: white; }
+
+        /* --- Hero 主視覺 --- */
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 5rem;
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--solar-orange);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* --- 通用區塊 --- */
+        .section { padding: 80px 5%; border-bottom: 1px solid #222; }
+        .bg-darker { background-color: #0a0a0a; }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .section-header { margin-bottom: 50px; text-align: center; }
+        .section-header h2 { font-size: 2.5rem; color: white; margin-bottom: 10px; font-weight: 700; }
+        .section-header span { font-family: 'Teko', sans-serif; color: var(--solar-orange); font-size: 1.5rem; letter-spacing: 2px; }
+
+        /* --- 圖文排版 (Grid) --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .text-col h3 {
+            font-size: 1.8rem;
+            color: white;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--solar-orange);
+            padding-left: 15px;
+        }
+
+        .text-col h4 {
+            font-size: 1.3rem;
+            color: var(--solar-orange);
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .text-col p {
+            color: #ccc;
+            margin-bottom: 20px;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        .img-col img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        /* --- 路線卡片 (垂直列表) --- */
+        .route-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .route-card {
+            background: #151515;
+            padding: 30px;
+            border-radius: 8px;
+            border-top: 4px solid var(--solar-orange);
+            transition: 0.3s;
+        }
+        
+        .route-card:hover { transform: translateY(-5px); background: #1a1a1a; }
+
+        .route-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .route-name { font-size: 1.4rem; font-weight: 700; color: white; }
+        .route-km { font-family: 'Teko', sans-serif; font-size: 2rem; color: var(--solar-orange); }
+        .route-km small { font-size: 1rem; color: #666; margin-left: 2px; }
+
+        .route-desc { color: #aaa; font-size: 1rem; margin-bottom: 15px; }
+        .route-highlight { background: rgba(255,68,0,0.1); color: var(--solar-orange); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem; display: inline-block; }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero h1 { font-size: 4rem; }
+            .text-col { order: 2; }
+            .img-col { order: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="NKUST Apollo Logo" class="logo-img">
+            <div class="logo-text">NKUST <span>APOLLO</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="index.html#about">關於車隊</a></li>
+                <li><a href="index.html#future">未來展望</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <p>TAIWAN LOOP PROJECT</p>
+        <h1>APOLLO IX<br>環島計畫</h1>
+    </div>
+
+    <!-- Section 1: 計畫願景 (對應 9.jpg) -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>商業化潛力 & 實地測試</h2>
+                <span>VISION & POTENTIAL</span>
+            </div>
+
+            <div class="content-grid">
+                <!-- 左側：圖片 -->
+                <div class="img-col">
+                    <img src="9.png" alt="Apollo IX 環島計畫海報">
+                    <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px;">Apollo IX 環島計畫 - 用太陽寫下一段繞行台灣的旅程</p>
+                </div>
+
+                <!-- 右側：文字內容 (源自 9.jpg) -->
+                <div class="text-col">
+                    <h3>用太陽寫下一段繞行台灣的旅程</h3>
+                    <p>
+                        Apollo IX 環島計畫，不只是一次行駛挑戰，更是一場將太陽能車從競賽場域推向真實道路的實證行動。
+                        作為團隊第九代車款，Apollo IX 將以環島行駛的方式，驗證太陽能車在多變地形、日照條件與實際交通環境中的續航能力與系統穩定性，
+                        證明綠能移動技術不僅能在賽道上競速，更能<strong>走入生活、走遍城市</strong>。
+                    </p>
+
+                    <h4>商業化潛力</h4>
+                    <p>
+                        全球太陽能電動車目前仍以學術研究與國際賽事為主要發展場域，早期車型多為三輪、單人座之競賽形式。
+                        然而隨著技術成熟，趨勢正逐漸朝向四輪、雙人座之城市型太陽能車邁進，具備未來商業化潛力。
+                    </p>
+
+                    <h4>Apollo X 的資料起點</h4>
+                    <p>
+                        此計畫不僅是太陽能車的實證旅程，更是 <strong>Apollo X 的資料起點</strong>。
+                        透過跨越不同地形與氣候區段之環島測試，完整蒐集發電效率、能源消耗、行駛阻力等真實數據，並回饋驗證前期模擬模型。
+                        所有資料將導入 Apollo X 的 AI 行駛策略設計流程，作為未來「太陽能自適應智慧移動系統」的推進引擎。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: 路線規劃 (對應 10.jpg) -->
+    <section class="section bg-darker">
+        <div class="container">
+            <div class="section-header">
+                <h2>逆時針環島行駛 & 性能驗證</h2>
+                <span>COUNTER-CLOCKWISE ROUTE</span>
+            </div>
+
+            <div class="content-grid">
+                <!-- 左側：圖片 (路線圖) -->
+                <div class="img-col">
+                    <img src="10.png" alt="逆時針環島路線圖">
+                    <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px;">全台四大測試區段與里程規劃</p>
+                </div>
+
+                <!-- 右側：詳細路線文字 (源自 10.jpg) -->
+                <div class="text-col">
+                    <h3>四大性能驗證場域</h3>
+                    <p>
+                        本計畫以<strong>高雄</strong>為起點，採<strong>逆時針方向</strong>環島行駛，全程依地形與路況分為四大測試區段，
+                        蒐集能耗、操控與性能數據，驗證車輛在多樣環境下的表現。
+                    </p>
+
+                    <!-- 列表化呈現四個路段 -->
+                    <div class="route-list" style="grid-template-columns: 1fr; gap: 20px;">
+                        
+                        <!-- 1. 南部 -->
+                        <div class="route-card" style="border-top-color: #FFA500;">
+                            <div class="route-header">
+                                <span class="route-name">01. 南部路段</span>
+                                <span class="route-km" style="color: #FFA500;">165<small>km</small></span>
+                            </div>
+                            <p class="route-desc">
+                                自高雄出發，經屏東後進入台東。適合做為車輛懸吊與操控穩定性之測試場域，
+                                作為整體行車穩定與結構耐受度之評估依據。
+                            </p>
+                            <span class="route-highlight" style="color: #FFA500; background: rgba(255,165,0,0.1);">重點：懸吊操控穩定與結構耐久測試</span>
+                        </div>
+
+                        <!-- 2. 東部 -->
+                        <div class="route-card" style="border-top-color: #2ECC71;">
+                            <div class="route-header">
+                                <span class="route-name">02. 東部路段</span>
+                                <span class="route-km" style="color: #2ECC71;">167<small>km</small></span>
+                            </div>
+                            <p class="route-desc">
+                                台東至花蓮路段地形起伏，可驗證爬坡動力與能耗表現；下坡區段用以評估煞車效率。
+                                沿海彎道則測試車身穩定性與風場對操控的影響，建立風能擾動與能耗數據。
+                            </p>
+                            <span class="route-highlight" style="color: #2ECC71; background: rgba(46,204,113,0.1);">重點：沿海道路車身穩定測試</span>
+                        </div>
+
+                        <!-- 3. 北部 -->
+                        <div class="route-card" style="border-top-color: #3498DB;">
+                            <div class="route-header">
+                                <span class="route-name">03. 北部路段</span>
+                                <span class="route-km" style="color: #3498DB;">192<small>km</small></span>
+                            </div>
+                            <p class="route-desc">
+                                從花蓮北上經宜蘭至台北、桃園，進行都市環境下低速行駛能耗與操控便利性測試，
+                                並評估紅綠燈頻繁起停對續航的影響。同時因北部降雨機率高，可驗證車輛防水性與濕地行駛安全性。
+                            </p>
+                            <span class="route-highlight" style="color: #3498DB; background: rgba(52,152,219,0.1);">重點：城市密集段與車輛防水測試</span>
+                        </div>
+
+                        <!-- 4. 西部 -->
+                        <div class="route-card" style="border-top-color: #9B59B6;">
+                            <div class="route-header">
+                                <span class="route-name">04. 西部路段</span>
+                                <span class="route-km" style="color: #9B59B6;">321<small>km</small></span>
+                            </div>
+                            <p class="route-desc">
+                                從桃園沿西部沿海返回高雄，測試高速穩定性與續航表現，觀察平地長距離行駛下的能耗曲線與動力管理策略，
+                                評估車輛在長距離平地行駛時的性能穩定性與舒適性，以及車輛發電效率。
+                            </p>
+                            <span class="route-highlight" style="color: #9B59B6; background: rgba(155,89,182,0.1);">重點：高速穩定性與發電效率測試</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 50px; background: #000; border-top: 1px solid #222; color: #666;">
+        <p style="margin-bottom: 20px; font-size: 1.2rem; color: white;">「用一圈台灣，證明太陽能電動車是電動車的未來。」</p>
+        <a href="index.html#future" style="display: inline-block; padding: 10px 30px; border: 1px solid var(--solar-orange); color: var(--solar-orange); border-radius: 30px;">← 返回 未來展望</a>
+        <p style="margin-top: 30px; font-size: 0.9rem;">&copy; 2026 NKUST Apollo Solar Car Team. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

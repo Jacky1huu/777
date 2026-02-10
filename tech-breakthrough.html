@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo X 技術突破 | NKUST Apollo Solar Car Team</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- 1. 核心色票 (Index 風格) --- */
+        :root {
+            --bg-dark: #050505;       
+            --bg-white: #ffffff;      
+            --text-main: #222222;
+            --text-muted: #666666;
+            --solar-orange: #FF4400;
+            --tech-blue: #00A3FF; /* 用於強調高科技感 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        .en-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+
+        body {
+            /* 修改：改為純黑背景，避免固定背景導致文字滑動時被吃掉 */
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. 導覽列 (Index 風格) --- */
+        header {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 50px; width: auto; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); }
+
+        nav ul { display: flex; gap: 1.5rem; }
+        nav a { color: #bbb; font-size: 0.95rem; font-weight: 500; letter-spacing: 1px; position: relative; }
+        nav a:hover { color: white; }
+
+        /* --- 3. Hero Section --- */
+        .page-hero {
+            height: 60vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background-image: url('https://images.unsplash.com/photo-1558486012-817147316fbe?auto=format&fit=crop&w=1920&q=80'); 
+            background-size: cover;
+            background-position: center;
+            /* 調整遮罩，讓底部融合更自然 */
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+
+        .page-hero::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1;
+        }
+
+        .hero-text { position: relative; z-index: 2; max-width: 1000px; padding: 0 20px; }
+        .hero-text h1 {
+            font-family: 'Teko', sans-serif; font-size: 6rem; font-weight: 600; line-height: 0.9; margin-bottom: 10px;
+            text-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+        .hero-text p { 
+            font-size: 1.2rem; color: var(--solar-orange); max-width: 800px; margin: 0 auto; 
+            letter-spacing: 3px; font-weight: 700; text-transform: uppercase;
+        }
+
+        /* --- 4. 內容區塊 (上半部 - 深色) --- */
+        .content-section { 
+            padding: 80px 5%; 
+            position: relative; 
+            max-width: 1300px;
+            margin: 0 auto;
+            margin-top: -80px; /* 向上銜接 */
+            z-index: 10;
+            /* 確保這區塊背景是透明或深色，文字為白色 */
+        }
+
+        .section-header { 
+            text-align: center; margin-bottom: 50px;
+        }
+        .section-header h2 { font-size: 3rem; color: var(--text-main); font-weight: 800; line-height: 1; }
+        /* 在深色背景上的標題要變白 */
+        .on-dark h2 { color: white; }
+        .section-header span { font-family: 'Teko', sans-serif; color: var(--solar-orange); font-size: 1.5rem; letter-spacing: 2px; }
+
+        /* 核心願景介紹 */
+        .intro-box {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 60px auto;
+            color: #ddd; /* 淺灰字，確保在深黑背景清楚 */
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+        .intro-quote {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 700;
+            margin-top: 30px;
+            display: block;
+            border-top: 1px solid var(--solar-orange);
+            border-bottom: 1px solid var(--solar-orange);
+            padding: 20px 0;
+        }
+
+        /* 主要圖片展示 (12.jpg) */
+        .main-tech-img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 80px;
+            border: 1px solid #333;
+        }
+
+        /* --- 5. 六大技術卡片 (下半部 - 白色區塊) --- */
+        .tech-section {
+            background: var(--bg-white); /* 這裡設定白色背景 */
+            padding: 80px 5%;
+            border-radius: 20px 20px 0 0; /* 圓角過渡 */
+            position: relative;
+            z-index: 20; /* 確保蓋過上方 */
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .tech-card {
+            background: #f8f8f8;
+            padding: 40px 30px;
+            border-radius: 8px;
+            border-top: 4px solid var(--solar-orange);
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            color: var(--solar-orange);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .tech-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .tech-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .tech-highlight {
+            font-size: 0.9rem;
+            color: var(--tech-blue);
+            font-weight: 600;
+            margin-top: 15px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- 6. 時程表 --- */
+        .timeline-box {
+            margin-top: 100px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-table { width: 100%; border-collapse: collapse; }
+        .timeline-table th { text-align: left; padding: 15px; border-bottom: 2px solid #eee; color: var(--text-main); font-size: 1.1rem; }
+        .timeline-table td { padding: 15px; border-bottom: 1px solid #f0f0f0; color: #555; }
+        .timeline-table tr:last-child td { border-bottom: none; }
+        .phase { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.2rem; }
+
+        /* --- Footer --- */
+        footer { 
+            padding: 80px 5%; 
+            background: #111; 
+            color: white; 
+            border-top: 4px solid var(--solar-orange); 
+            text-align: center;
+        }
+        .footer-info h4 { font-family: 'Teko', sans-serif; font-size: 2rem; margin-bottom: 1rem; }
+        .footer-info p { color: #888; margin-bottom: 20px;}
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid var(--solar-orange);
+            color: var(--solar-orange);
+            border-radius: 30px;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .back-btn:hover { background: var(--solar-orange); color: white; }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .hero-text h1 { font-size: 4rem; }
+            .tech-grid { grid-template-columns: 1fr; }
+            .timeline-table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <div class="logo-text">NKUST <span>APOLLO</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="index.html#future">未來展望</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="page-hero">
+        <div class="hero-text">
+            <h1>APOLLO X</h1>
+            <p>TECHNOLOGY HIGHLIGHTS OVERVIEW</p>
+        </div>
+    </div>
+
+    <!-- 上半部：深色背景區 (介紹 + 大圖) -->
+    <div class="content-section">
+        <div class="section-header on-dark">
+            <h2>融合太陽智慧、動態氣流與能源駕駛的次世代平台</h2>
+            <span>APOLLO X PROJECT</span>
+        </div>
+
+        <div class="intro-box">
+            <p>
+                Apollo X 是我們對未來移動載具的終極想像。透過導入六大核心技術，我們不再只是製造一輛太陽能車，
+                而是打造一個集潔淨能源、AI 運算與智慧電網於一身的移動平台。
+            </p>
+            <span class="intro-quote">
+                "Apollo X – Unifying Solar Intelligence, Aerodynamics, and Energy Mobility."
+            </span>
+        </div>
+
+        <!-- 核心圖片展示：12.jpg -->
+        <img src="12.png" alt="Apollo X 技術亮點總覽" class="main-tech-img">
+    </div>
+
+    <!-- 下半部：白色背景區 (詳細技術卡片) -->
+    <div class="tech-section">
+        <div class="section-header">
+            <h2>六大技術亮點</h2>
+            <span>CORE INNOVATIONS</span>
+        </div>
+
+        <div class="tech-grid">
+            
+            <!-- 1. Solar -->
+            <div class="tech-card">
+                <i class="fas fa-solar-panel tech-icon"></i>
+                <h3>車用可撓式<br>高效率鈣鈦礦模組</h3>
+                <p>導入新一代 Perovskite 太陽能技術，具備可撓曲特性，能完美貼合流線車體，大幅提升光電轉換效率。</p>
+                <span class="tech-highlight">Flexible Perovskite Module</span>
+            </div>
+
+            <!-- 2. Battery -->
+            <div class="tech-card">
+                <i class="fas fa-battery-full tech-icon"></i>
+                <h3>可擴充式<br>高能量密度蓄電池組</h3>
+                <p>模組化電池包設計，可依據短程衝刺或長途巡航需求，彈性調整電池數量，達成最佳能重比。</p>
+                <span class="tech-highlight">Expandable Battery System</span>
+            </div>
+
+            <!-- 3. Suspension -->
+            <div class="tech-card">
+                <i class="fas fa-cogs tech-icon"></i>
+                <h3>路況自適應<br>懸吊系統</h3>
+                <p>電子主動式懸吊，能即時偵測路面狀況並調整阻尼與車高，兼顧賽道貼地性與一般道路舒適性。</p>
+                <span class="tech-highlight">Adaptive Suspension</span>
+            </div>
+
+            <!-- 4. V2G Energy -->
+            <div class="tech-card">
+                <i class="fas fa-plug tech-icon"></i>
+                <h3>支援 V2G/G2V<br>智慧雙向能源交換</h3>
+                <p>不只是消耗能源，更能回饋電網。車輛可作為移動儲能站，支援 Vehicle-to-Grid 雙向供電技術。</p>
+                <span class="tech-highlight">Bi-directional Energy</span>
+            </div>
+
+            <!-- 5. IoV -->
+            <div class="tech-card">
+                <i class="fas fa-wifi tech-icon"></i>
+                <h3>IoV 導向之<br>車輛控制與智慧監測</h3>
+                <p>全車聯網系統，即時監控全車數據（電壓、溫度、胎壓），並透過雲端 AI 分析最佳行駛策略。</p>
+                <span class="tech-highlight">Intelligent IoV System</span>
+            </div>
+
+            <!-- 6. Aero -->
+            <div class="tech-card">
+                <i class="fas fa-wind tech-icon"></i>
+                <h3>創新車體結構<br>與低風阻設計</h3>
+                <p>結合 AI 動態導流氣流擴散裝置 (Diffuser)，在極低風阻的基礎上，主動產生下壓力以提升高速穩定性。</p>
+                <span class="tech-highlight">AI-driven Aerodynamics</span>
+            </div>
+
+        </div>
+
+        <!-- 專案時程表 -->
+        <div class="timeline-box">
+            <div class="section-header" style="margin-bottom: 30px;">
+                <h2>專案開發時程</h2>
+                <span>PROJECT TIMELINE</span>
+            </div>
+            <table class="timeline-table">
+                <thead>
+                    <tr>
+                        <th>階段 Phase</th>
+                        <th>時間 Duration</th>
+                        <th>關鍵目標 Key Objectives</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="phase">01. 概念設計</td>
+                        <td>2026 Q1</td>
+                        <td>技術規格定案、鈣鈦礦模組可行性評估。</td>
+                    </tr>
+                    <tr>
+                        <td class="phase">02. 模擬分析</td>
+                        <td>2026 Q2</td>
+                        <td>CFD 流體力學模擬、底盤幾何運算。</td>
+                    </tr>
+                    <tr>
+                        <td class="phase">03. 原型製作</td>
+                        <td>2026 Q3-Q4</td>
+                        <td>車體模具開發、關鍵零組件 (BMS, V2G) 測試。</td>
+                    </tr>
+                    <tr>
+                        <td class="phase">04. 實車組裝</td>
+                        <td>2027 Q1</td>
+                        <td>全車系統整合、碳纖維車體成型。</td>
+                    </tr>
+                    <tr>
+                        <td class="phase">05. 測試驗證</td>
+                        <td>2027 Q2</td>
+                        <td>ARTC 實車路測、風洞測試、參數調校。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-info">
+            <h4>NKUST APOLLO</h4>
+            <p>國立高雄科技大學 再生能源館<br>Kaohsiung, Taiwan</p>
+            <p style="margin-top:20px; font-size:0.8rem; color:#555;">&copy; 2026 NKUST Apollo. All Rights Reserved.</p>
+            
+            <a href="index.html#future" class="back-btn">← 返回 未來展望</a>
+        </div>
+    </footer>
+
+</body>
+</html>

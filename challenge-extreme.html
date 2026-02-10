@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挑戰極限 | 高科大阿波羅太陽能車隊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. 核心色票 (與首頁一致) --- */
+        :root {
+            --bg-dark: #050505;       
+            --bg-white: #ffffff;      
+            --text-main: #222222;
+            --text-muted: #666666;
+            --solar-orange: #FF4400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        .en-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 2. 導覽列 (簡化版) --- */
+        header {
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 40px; width: auto; }
+        .logo-text { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); }
+
+        .back-nav a { 
+            color: #bbb; font-family: 'Teko', sans-serif; font-size: 1.2rem; letter-spacing: 1px; 
+            border: 1px solid rgba(255,255,255,0.3); padding: 5px 20px; border-radius: 50px;
+        }
+        .back-nav a:hover { background: var(--solar-orange); color: white; border-color: var(--solar-orange); }
+
+        /* --- 3. 內頁 Hero Section --- */
+        .page-hero {
+            height: 60vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background-image: url('主視覺.JPG'); /* 使用您指定的檔案 */
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 0;
+        }
+
+        .page-hero::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1;
+        }
+
+        .hero-text { position: relative; z-index: 2; max-width: 800px; padding: 0 20px;}
+        .hero-text h1 {
+            font-family: 'Teko', sans-serif; font-size: 5rem; font-weight: 600; line-height: 1; margin-bottom: 10px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero-text p { font-size: 1.5rem; font-weight: 300; letter-spacing: 2px; color: var(--solar-orange); }
+
+        /* --- 4. 內容區塊 --- */
+        .content-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+
+        .intro-block {
+            text-align: center; margin-bottom: 80px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        .intro-block h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+        .intro-block h2 span { color: var(--solar-orange); font-family: 'Teko', sans-serif; font-size: 1.5rem; display: block; margin-bottom: 5px; letter-spacing: 2px; }
+        .intro-block p { color: var(--text-muted); font-size: 1.1rem; text-align: justify; }
+
+        /* --- 5. 交錯式圖文排版 (Alternating Layout) --- */
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 100px;
+            align-items: center;
+        }
+
+        /* 偶數行：圖片在右，文字在左 (透過 CSS 改變順序) */
+        .feature-row.reverse .feature-img-box { order: 2; }
+        .feature-row.reverse .feature-text-box { order: 1; }
+
+        .feature-img-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            height: 400px;
+        }
+        
+        .feature-img-box img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .feature-img-box:hover img { transform: scale(1.05); }
+
+        .feature-text-box h3 {
+            font-size: 2rem; font-weight: 700; margin-bottom: 20px; line-height: 1.3;
+        }
+        .feature-text-box h3::before {
+            content: ''; display: inline-block; width: 6px; height: 25px; 
+            background: var(--solar-orange); margin-right: 15px; vertical-align: middle;
+        }
+        .feature-text-box p { color: #555; margin-bottom: 20px; font-size: 1.05rem; }
+        
+        .styled-list { list-style: none; padding-left: 10px; }
+        .styled-list li { margin-bottom: 10px; color: #444; position: relative; padding-left: 25px; }
+        .styled-list li::before {
+            content: '➜'; color: var(--solar-orange); position: absolute; left: 0; font-size: 0.9rem;
+        }
+
+        .highlight-badge {
+            display: inline-block; background: rgba(255, 68, 0, 0.1); color: var(--solar-orange);
+            padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.9rem; margin-top: 5px;
+        }
+
+        /* --- Footer --- */
+        footer { 
+            padding: 60px 5%; 
+            background: #111; 
+            color: white; 
+            text-align: center;
+            border-top: 4px solid var(--solar-orange);
+        }
+        .footer-btn {
+            display: inline-block; margin-top: 20px; padding: 12px 40px;
+            background: var(--solar-orange); color: white; font-weight: bold;
+            border-radius: 50px; transition: 0.3s;
+        }
+        .footer-btn:hover { background: #e65c00; transform: translateY(-3px); }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .hero-text h1 { font-size: 3.5rem; }
+            .feature-row { grid-template-columns: 1fr; gap: 30px; margin-bottom: 60px; }
+            .feature-row.reverse .feature-img-box { order: 0; } /* 手機版統一圖片在上方 */
+            .feature-row.reverse .feature-text-box { order: 1; }
+            .feature-img-box { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <div class="logo-text">NKUST <span>APOLLO</span></div>
+        </div>
+        <div class="back-nav">
+            <a href="index.html#about">BACK TO HOME</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="page-hero">
+        <div class="hero-text">
+            <h1>CHALLENGE THE EXTREME</h1>
+            <p>征服荒漠：3000 公里的終極考驗</p>
+        </div>
+    </div>
+
+    <!-- Intro Content -->
+    <section class="content-section">
+        
+        <div class="intro-block">
+            <h2><span>WORLD SOLAR CHALLENGE</span>世界太陽能車挑戰賽</h2>
+            <p>
+                全球共有 6 大太陽能車賽事，而<strong>「世界太陽能車挑戰賽」(World Solar Challenge, WSC)</strong> 是其中歷史最悠久、規模最大的頂級殿堂。這不僅是一場賽車，更是一場長達 3021 公里的生存挑戰。在澳洲的荒蕪內陸，選手需面對白天高達 <strong>40°C</strong> 的高溫、強勁的側風，以及夜間的野生動物。這是檢驗綠能技術與人類意志的極限舞台。
+            </p>
+        </div>
+
+        <!-- 區塊 1: 3000KM -->
+        <div class="feature-row">
+            <div class="feature-img-box">
+                <img src="3000KM.png" alt="3000公里長征示意">
+            </div>
+            <div class="feature-text-box">
+                <h3>3000 公里的征途：BWSC 2025</h3>
+                <p>
+                    團隊參加 2025 年普利司通世界太陽能車挑戰賽 (BWSC 2025)，與來自世界各地的頂尖學子同場競技。這場由澳洲北部的達爾文 (Darwin) 出發，一路向南至阿德雷得 (Adelaide) 的史詩級長征，路程總長約 3,021 公里。
+                </p>
+                <span class="highlight-badge">ROUTE: DARWIN ➜ ADELAIDE</span>
+            </div>
+        </div>
+
+        <!-- 區塊 2: 安全檢查 (Reverse Layout) -->
+        <div class="feature-row reverse">
+            <div class="feature-img-box">
+                <img src="速度感.JPG" alt="車輛安全檢查">
+            </div>
+            <div class="feature-text-box">
+                <h3>嚴格把關：道路前的安全檢查</h3>
+                <p>
+                    競賽前，大會聘請專家與監理人員進行最嚴格的靜態與動態安全檢查。在這一週內，團隊在專業指導下不斷修正，確保車輛以最佳狀態迎接挑戰。
+                </p>
+                <ul class="styled-list">
+                    <li>機械五金分析與車輛設計報告</li>
+                    <li>駕駛緊急逃生演練</li>
+                    <li>高速緊急煞車與動態繞錐測試</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 區塊 3: 團隊合作 -->
+        <div class="feature-row">
+            <div class="feature-img-box">
+                <img src="團隊合作.JPG" alt="團隊合作與車隊">
+            </div>
+            <div class="feature-text-box">
+                <h3>路途中的夥伴：全方位團隊戰</h3>
+                <p>
+                    這不只是一台車的比賽。除了駕駛，其餘成員分乘於車隊中的支援車輛，扮演<strong>偵查、前導、後衛與後勤</strong>等關鍵角色。大家透過無線電緊密聯繫，即時回報路況與數據，共同克服海內外繁瑣的測試程序與路程中的突發狀況。
+                </p>
+            </div>
+        </div>
+
+        <!-- 區塊 4: Apollo IX Plus (Reverse Layout) -->
+        <div class="feature-row reverse">
+            <div class="feature-img-box">
+                <img src="荒漠長征的壯闊感.png" alt="Apollo IX Plus 賽道英姿">
+            </div>
+            <div class="feature-text-box">
+                <h3>寒冬過後的暖陽：Apollo IX Plus</h3>
+                <p>
+                    BWSC 2025 首次於澳洲冬末初春舉辦，這意味著我們必須面對強烈側風、傾盆大雨甚至冰雹的極端氣候。我們參加的 Cruiser 組不僅講求能耗，更引入「綠色主流」概念，對底盤與電力系統進行了全面優化。
+                </p>
+                <ul class="styled-list">
+                    <li>Hidden Valley 賽車場奪下<strong>全場第九名</strong></li>
+                    <li>極具辨識度的外觀成為賽道焦點</li>
+                    <li>克服距離終點僅剩 70 公里的電量極限挑戰</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: bold; color: var(--solar-orange);">
+                    最終榮獲世界第四，見證了台灣團隊的堅韌精神。
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>探索更多阿波羅的故事</p>
+        <a href="index.html#about" class="footer-btn">返回關於我們</a>
+        <p style="margin-top: 30px; font-size: 0.8rem; color: #555;">&copy; 2025 NKUST Apollo Solar Car Team</p>
+    </footer>
+
+</body>
+</html>

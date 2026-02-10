@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon | NKUST Apollo Solar Car Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Teko:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- Tech Theme (Dark Mode - Lighter Version) --- */
+        :root {
+            --bg-dark: #1a1a1a;       /* 修改：從 #050505 調亮至深灰色 */
+            --text-main: #ffffff;
+            --text-muted: #cccccc;    /* 修改：文字也稍微調亮 */
+            --solar-orange: #FF4400;
+            --glow-orange: rgba(255, 68, 0, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+        
+        body {
+            background-color: var(--bg-dark);
+            /* 修改：加入放射狀漸層讓中間比較亮，並增加格線亮度 (0.03 -> 0.05) */
+            background-image: 
+                radial-gradient(circle at center, #2a2a2a 0%, #111111 100%),
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px; /* 確保漸層覆蓋全螢幕 */
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- Header (簡化版) --- */
+        header {
+            padding: 1rem 5%;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 50px; width: auto; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; font-style: italic; color: white; line-height: 1; }
+        .logo-text span { color: var(--solar-orange); text-shadow: 0 0 10px var(--glow-orange); }
+
+        /* --- Main Content --- */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* 背景大圖模糊處理 */
+        .bg-image {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1541417938382-7aa7eb98270d?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35; /* 修改：透明度調高 (0.2 -> 0.35)，讓背景亮一點 */
+            z-index: -1;
+            filter: blur(4px) grayscale(80%); /* 修改：降低模糊度 */
+            mask-image: radial-gradient(circle, black 40%, transparent 90%); /* 修改：遮罩範圍擴大 */
+            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 90%);
+        }
+
+        h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 8rem;
+            line-height: 0.9;
+            color: white;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0,0,0,0.8);
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--solar-orange);
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--glow-orange);
+        }
+
+        p {
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            font-weight: 400; /* 修改：字體稍微加粗增加可讀性 */
+        }
+
+        /* --- Progress Bar Animation --- */
+        .progress-wrapper {
+            width: 300px;
+            height: 4px;
+            background: rgba(255,255,255,0.2); /* 修改：進度條底色調亮 */
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 30%;
+            background: var(--solar-orange);
+            box-shadow: 0 0 10px var(--solar-orange);
+            animation: loading 2s infinite ease-in-out;
+        }
+
+        @keyframes loading {
+            0% { left: -30%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        /* --- Button --- */
+        .btn-home {
+            padding: 15px 40px;
+            border: 1px solid var(--solar-orange);
+            color: white;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            background: rgba(255,255,255,0.05); /* 修改：按鈕背景稍微調亮 */
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-home:hover {
+            background: var(--solar-orange);
+            box-shadow: 0 0 20px var(--glow-orange);
+            color: white;
+        }
+
+        /* RWD */
+        @media (max-width: 768px) {
+            h1 { font-size: 5rem; }
+            h2 { font-size: 1.2rem; letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html" style="display: flex; align-items: center; gap: 15px;">
+                <!-- 使用 logo.png -->
+                <img src="logo.png" alt="NKUST Apollo Logo" class="logo-img">
+                <div class="logo-text">NKUST <span>APOLLO</span></div>
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="bg-image"></div>
+        
+        <h1>Coming Soon</h1>
+        <h2>Page Under Construction</h2>
+        
+        <p>
+            我們正在全力打造這個頁面，準備為您呈現最新的太陽能車技術與資訊。<br>
+            系統建置中，敬請期待。
+        </p>
+
+        <!-- 裝飾用的讀取條 -->
+        <div class="progress-wrapper">
+            <div class="progress-bar"></div>
+        </div>
+
+        <a href="index.html" class="btn-home">Back to Homepage</a>
+    </div>
+
+</body>
+</html>
